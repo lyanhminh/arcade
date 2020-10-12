@@ -1,4 +1,4 @@
-{% extends "gameroom/layout.html" %}
+{% extends "gameroom/layout.html"  %}
 {% block body %}
 <div>
     <h2>GAME ROOM</h2>
@@ -9,9 +9,10 @@
         <a href='{%url "gameroom:login"%}'>Login</a>
         {% endif%}
     </div>
-    <p><a href='{% url "gameroom:play"%}'>Tetris</a></p>
-    <p><a href='{% url "gameroom:play"%}'>Snake</a></p>
-    <p><a href='{% url "gameroom:play"%}'>Space Invaders</a></p> 
+    {% for key, game in games.items %}
+
+    <p><a href='{% url "gameroom:play" game%}'>{{game}}</a></p>
+    {% endfor %}
       
 </div>
 

@@ -25,11 +25,14 @@ class LoginForm(forms.Form):
     email = forms.EmailField(max_length = 64, min_length =6, label='EMAIL')
     password = forms.CharField(min_length = 8, label = "PASSWORD")
 
-def index(request):
-    return render(request, "gameroom/index.html", {'loggedInUser': loggedInUser})
+def index(request, loggedInUser=''):
+    games = {'tetris': "tetris",
+             'snake': 'snake',
+             'spaceInvaders': 'space-invaders'}
+    return render(request, "gameroom/index.html", {'loggedInUser': loggedInUser, 'games':games})
 
-def play(request):
-    return render(request, "gameroom/play.html")
+def play(request, game):
+    return render(request, "gameroom/play.html", {'game':game})
 
 def register(request):
     if request.method == 'POST':
@@ -53,7 +56,7 @@ def login(request):
             password = form.cleaned_data['password']
             if email in [x.email for x in users]:
                 loggedInUser = next(filter(lambda user: user.email == email, users))
-            return HttpResponseRedirect(reverse("gameroom:home", kwargs={'loggedInUser': loggedInUser}))
+            return HttpResponseRedirect(reverse("gameroom:home", kwargs={ 'loggedInUser': loggedInUser }))
         else:
             return render(request, 'gameroom/login.html', {'form': form})
     else:

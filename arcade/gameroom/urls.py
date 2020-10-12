@@ -4,7 +4,7 @@ app_name = 'gameroom'
 
 
 urlpatterns = [
-    path('', views.index, name='home'),
-    path('play', views.play, name='play'),
+    path('<str:loggedInUser>', views.index, name='home'),
+    path('play/<str:game>', views.play, name='play'),
     path('register', views.register, name='register'),
     path('login', views.login, name='login')] 
