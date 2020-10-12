@@ -1,0 +1,12 @@
+{% extends 'gameroom/layout.html'%}
+
+{% block body%}
+<div>
+    <h2>LOGIN</h2>
+    <form action='{% url "gameroom:login" %}' method='post'>
+        {% csrf_token %}
+        {{form}}
+        <input type='submit'>
+    </form>
+</div>
+{% endblock %}
