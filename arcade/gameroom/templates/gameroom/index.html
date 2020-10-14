@@ -1,17 +1,11 @@
 {% extends "gameroom/layout.html"  %}
+
 {% block body %}
 <div>
     <h2>GAME ROOM</h2>
-    <div>{% if loggedInUser%}
-        <span>Logout</span> <span>{{loggedInUser}}</span>
-        {% else%}
-        <a href='{% url "gameroom:register"%}'>Register</a>
-        <a href='{%url "gameroom:login"%}'>Login</a>
-        {% endif%}
-    </div>
-    {% for key, game in games.items %}
+    {% for game in games %}
 
-    <p><a href='{% url "gameroom:play" game%}'>{{game}}</a></p>
+    <p><a href='{% url "gameroom:play" game %}'>{{game}}</a></p>
     {% endfor %}
       
 </div>
