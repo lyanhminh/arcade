@@ -4,8 +4,7 @@
 <div>
     <h2>GAME ROOM</h2>
     {% for game in games %}
-
-    <p><a href='{% url "gameroom:play" game %}'>{{game}}</a></p>
+        <p><a href='{% url "gameroom:play" game %}'>{{game}}</a></p>
     {% endfor %}
       
 </div>

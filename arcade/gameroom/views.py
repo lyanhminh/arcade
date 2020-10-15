@@ -6,13 +6,14 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 # Create your views here.
+games = {x: 'js/' + x +'.js' for x in ['tetris', 'space-invaders', 'snake']}
 
-def index(request, loggedInUser=''):
-    games = ["tetris", 'snake', 'space-invaders']
-    return render(request, "gameroom/index.html", {'games': games})
+def index(request):
+    return render(request, "gameroom/index.html", {'games': list(games.keys())})
 
 def play(request, game):
-    return render(request, "gameroom/play.html", {'game':game})
+    print(games[game])
+    return render(request, "gameroom/play.html", {'game': game, 'path': games[game]})
 #
 def register(request):
     if request.method == 'POST':

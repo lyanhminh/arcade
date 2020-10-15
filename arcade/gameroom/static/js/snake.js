@@ -1,12 +1,12 @@
-DIAMETER = 30;
-STEP = 22
-WIDTH = DIAMETER * STEP;
-HEIGHT = DIAMETER * STEP;
-FRAMERATE = 400;
-STARTING_SNAKE_LENGTH = 6;
-STARTX = WIDTH / 2 - DIAMETER * 3 + DIAMETER/2;
-STARTY = HEIGHT / 2 + DIAMETER/2;
-SPEED = DIAMETER/2;
+const DIAMETER = 30;
+const STEP = 22
+const WIDTH = DIAMETER * STEP;
+const HEIGHT = DIAMETER * STEP;
+const FRAMERATE = 400;
+const STARTING_SNAKE_LENGTH = 6;
+const STARTX = WIDTH / 2 - DIAMETER * 3 + DIAMETER/2;
+const STARTY = HEIGHT / 2 + DIAMETER/2;
+const SPEED = DIAMETER/2;
 
 const makeRandom = function(min, max){
     return Math.floor(Math.random() * (max - min + 1) + min)
@@ -198,7 +198,7 @@ class Snake {
     }
 }
 
-function startSnake() {
+function start() {
     gameCanvas.snake = new Snake(STARTX, STARTY, SPEED, 0);
     gameCanvas.start();
     console.log(gameCanvas.snake)
@@ -228,4 +228,4 @@ wrapAround = function(pos){
             return pos;
     }
 }
-startSnake();
+// start();

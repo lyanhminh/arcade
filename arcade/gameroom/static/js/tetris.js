@@ -1,16 +1,16 @@
-BLOCK_SIZE = 30;
-WIDTH = BLOCK_SIZE * 13;
-HEIGHT = BLOCK_SIZE * 25;
-GRAVITY = BLOCK_SIZE
-SHAPES = ['I', 'L', 'S', 'T'];
-MOVEX = 1
-MOVEY = 2
-FRAMERATE = 220;
-BLOCKRATE = FRAMERATE * 5;
-SPAWNRATE = BLOCKRATE * 6;
-KEYRATE = FRAMERATE * 1.1
+const BLOCK_SIZE = 30;
+const WIDTH = BLOCK_SIZE * 13;
+const HEIGHT = BLOCK_SIZE * 25;
+const GRAVITY = BLOCK_SIZE
+const SHAPES = ['I', 'L', 'S', 'T'];
+const MOVEX = 1
+const MOVEY = 2
+const FRAMERATE = 220;
+const BLOCKRATE = FRAMERATE * 5;
+const SPAWNRATE = BLOCKRATE * 6;
+const KEYRATE = FRAMERATE * 1.1
 
-VX = BLOCK_SIZE;
+const VX = BLOCK_SIZE;
 
 let Mrotation = math.matrix([[0, -1], [1, 0]]);
 
@@ -255,7 +255,7 @@ function updateKeys() {
     updateBlocks();
 }
 
-function startTetris() {
+function start() {
     gameCanvas.start();
     gameCanvas.makeNewShape();
     gameCanvas.setControlledShape();
@@ -290,5 +290,5 @@ function updateBlocks() {
     }
 }
 
-startTetris();
+// start();
 

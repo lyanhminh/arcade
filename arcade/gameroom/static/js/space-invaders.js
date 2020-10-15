@@ -7,6 +7,9 @@ const MISSILE_SPEED = SPEED * 1.5;
 const INVADER_SPEED = SPEED * .8;
 const REGENERATERATE = 10 * FRAMERATE;
 const JITTERRATE = .85;
+const A = 15;
+const B = 10;
+const DIAMETER = 15
 
 const gameCanvas = {
     canvas: document.getElementById('canvas'),
@@ -147,19 +150,34 @@ class Invader extends Ship{
         this.color = 'red';
         this.vy = INVADER_SPEED;
         this.vx = INVADER_SPEED;
+        this.center = pos;
+        this.a = A;
+        this.b = B;
+        this.top = this.y -  this.b;
+        this.bottom = [this.x, this.y + this.b];
+        this.insideR = [this.x + DIAMETER/2, this.top[1]  - this.b + 2 ];
+        this.insideL = [this.x - DIAMETER/2, this.top[1]  - this.b + 2 ];
+        console.log(this.top, this.bottom)
     }
     render(){
         gameCanvas.context.beginPath();
-        gameCanvas.context.ellipse(this.x, this.y, 15,10,0, 0, 2*Math.PI )
+        gameCanvas.context.ellipse(this.x, this.y, this.a, this.b, 0, 0, 2*Math.PI )
         gameCanvas.context.stroke()
         gameCanvas.context.fillStyle = this.color;
         gameCanvas.context.fill();
-        drawCircle('yellow', this.x, this.y - 10, 15)
+        drawCircle('yellow', this.x, this.y - this.B, DIAMETER)
     }
     update(){
         this.vx = Math.random() > JITTERRATE ? -1*this.vx : this.vx;
         this.x += this.vx;
         this.y += this.vy;
+        this.center = [this.x, this.y];
+        this.top = [this.x, this.y - this.b];
+        this.bottom = [this.x, this.y + this.b];
+        this.insideR = [this.x + DIAMETER/2, this.top[1]  - this.b + 2 ];
+        this.insideL = [this.x - DIAMETER/2, this.top[1]  - this.b + 2 ];
+
+
     }
 }
 
@@ -190,7 +208,7 @@ function drawCircle(color, x,y, diameter){
 }
 
 
-const startInvaders = function(){
+const start = function(){
     gameCanvas.ship = new Ship( [WIDTH/2, HEIGHT -115])
     let invader = new Invader([WIDTH*.6, 50])
     gameCanvas.invaders.push(invader)
@@ -198,4 +216,4 @@ const startInvaders = function(){
     gameCanvas.start()
 }
 
-startInvaders()
+// start()
