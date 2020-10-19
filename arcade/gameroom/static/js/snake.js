@@ -7,7 +7,7 @@ const STARTING_SNAKE_LENGTH = 6;
 const STARTX = WIDTH / 2 - DIAMETER * 3 + DIAMETER/2;
 const STARTY = HEIGHT / 2 + DIAMETER/2;
 const SPEED = DIAMETER/2;
-
+let interval;
 const makeRandom = function(min, max){
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
@@ -24,17 +24,19 @@ const gameCanvas = {
         this.canvas.width = WIDTH;
         this.canvas.height = HEIGHT;
         this.context = this.canvas.getContext('2d');
-        this.interval = setInterval(updateCanvas, FRAMERATE);
+        interval = setInterval(updateCanvas, FRAMERATE);
         console.log('add listener')
         window.addEventListener('keydown', function (e) {
             console.log('keypress', e.code)
             if (e.code == 'Enter') {
                 if (gameCanvas.paused) {
-                    clearInterval(gameCanvas.interval)
+                    console.log('PPPPPPPPPPPAAAAAAAAAAAAAAAUUUUUUUUUUUUUUSSSSSSSSSEEEEEEEEEEEDDDDDDDD', interval)
+                    clearInterval(interval)
+                    console.log(interval)
                     gameCanvas.paused = false;
                 }
                 else {
-                    gameCanvas.interval = setInterval(updateCanvas, FRAMERATE);
+                    interval = setInterval(updateCanvas, FRAMERATE);
                     gameCanvas.paused = true;
                 }
             }

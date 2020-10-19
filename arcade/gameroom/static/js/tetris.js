@@ -11,6 +11,9 @@ const SPAWNRATE = BLOCKRATE * 6;
 const KEYRATE = FRAMERATE * 1.1
 
 const VX = BLOCK_SIZE;
+let keyInterval;
+let spawnInterval;
+let interval;
 
 let Mrotation = math.matrix([[0, -1], [1, 0]]);
 
@@ -33,7 +36,7 @@ const gameCanvas = {
         this.canvas.height = HEIGHT;
         this.context = this.canvas.getContext('2d');
         document.body.insertBefore(this.canvas, document.body.firstChild);
-        this.interval = setInterval(updateGameCanvas, FRAMERATE);
+        interval = setInterval(updateGameCanvas, FRAMERATE);
         window.addEventListener('keydown', function (e) {
             gameCanvas.keys[e.code] = true;
         });
@@ -44,15 +47,16 @@ const gameCanvas = {
             if (e.code == 'Enter') {
                 console.log('pause', gameCanvas.pause)
                 if (gameCanvas.pause) {
-                    clearInterval(gameCanvas.interval);
+                    clearInterval(interval);
                     clearInterval(spawnInterval);
                     clearInterval(keyInterval);
                     gameCanvas.pause = false;
                 }
                 else {
-                    gameCanvas.interval = setInterval(updateGameCanvas, FRAMERATE);
+                    interval = setInterval(updateGameCanvas, FRAMERATE);
                     spawnInterval = setInterval(gameCanvas.makeNewShape, SPAWNRATE);
-                    keyInterval = setInterval(updateKeys, KEYRATE); gameCanvas.pause = true;
+                    keyInterval = setInterval(updateKeys, KEYRATE); 
+                    gameCanvas.pause = true;
                 }
             }
 
