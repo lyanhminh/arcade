@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
+from .models import GameSession
 from django.urls import reverse
 
 # Create your views here.
@@ -28,4 +29,8 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'gameroom/register.html', {'form': form})
 
-#
+def leaderboard(request):
+    user = None if !request.user.is_authenticated else request.user
+    topUSers = User.objects.all()
+    form = {'user': user}
+    return render(request, 'gameroom/leaderboard.html')
