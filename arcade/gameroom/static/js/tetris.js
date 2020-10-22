@@ -1,19 +1,16 @@
-const BLOCK_SIZE = 30;
-const WIDTH = BLOCK_SIZE * 13;
-const HEIGHT = BLOCK_SIZE * 25;
-const GRAVITY = BLOCK_SIZE
-const SHAPES = ['I', 'L', 'S', 'T'];
-const MOVEX = 1
-const MOVEY = 2
-const FRAMERATE = 220;
-const BLOCKRATE = FRAMERATE * 5;
-const SPAWNRATE = BLOCKRATE * 6;
-const KEYRATE = FRAMERATE * 1.1
+BLOCK_SIZE = 30;
+WIDTH = BLOCK_SIZE * 13;
+HEIGHT = BLOCK_SIZE * 25;
+GRAVITY = BLOCK_SIZE
+SHAPES = ['I', 'L', 'S', 'T'];
+MOVEX = 1
+MOVEY = 2
+FRAMERATE = 220;
+BLOCKRATE = FRAMERATE * 1;
+SPAWNRATE = FRAMERATE *25;
+KEYRATE = FRAMERATE * .2
 
-const VX = BLOCK_SIZE;
-let keyInterval;
-let spawnInterval;
-let interval;
+VX = BLOCK_SIZE;
 
 let Mrotation = math.matrix([[0, -1], [1, 0]]);
 
@@ -29,6 +26,7 @@ const gameCanvas = {
     keys: [],
     vx: 0,
     vy: 1,
+    score: 0,
     pause: true,
     rotate: false,
     start: function () {
@@ -36,7 +34,7 @@ const gameCanvas = {
         this.canvas.height = HEIGHT;
         this.context = this.canvas.getContext('2d');
         document.body.insertBefore(this.canvas, document.body.firstChild);
-        interval = setInterval(updateGameCanvas, FRAMERATE);
+        this.interval = setInterval(updateGameCanvas, FRAMERATE);
         window.addEventListener('keydown', function (e) {
             gameCanvas.keys[e.code] = true;
         });
@@ -47,15 +45,13 @@ const gameCanvas = {
             if (e.code == 'Enter') {
                 console.log('pause', gameCanvas.pause)
                 if (gameCanvas.pause) {
-                    clearInterval(interval);
-                    clearInterval(spawnInterval);
-                    clearInterval(keyInterval);
+                    clearInterval(gameCanvas.interval);
+                    clearInterval(gameCanvas.spawnInterval);
                     gameCanvas.pause = false;
                 }
                 else {
-                    interval = setInterval(updateGameCanvas, FRAMERATE);
-                    spawnInterval = setInterval(gameCanvas.makeNewShape, SPAWNRATE);
-                    keyInterval = setInterval(updateKeys, KEYRATE); 
+                    gameCanvas.interval = setInterval(updateGameCanvas, FRAMERATE);
+                    gameCanvas.spawnInterval = setInterval(gameCanvas.makeNewShape, SPAWNRATE);
                     gameCanvas.pause = true;
                 }
             }
@@ -78,15 +74,46 @@ const gameCanvas = {
         fullRows.map(row => row.map(function (rowBlock) {
             shapesList.filter(shape => shape.id == rowBlock.shapeID).map(shape => shape.set = shape.set.filter(block => block.id != rowBlock.id))
         }))
+        console.log(fullRows)
         if (fullRows.length != 0) {
-            gameCanvas.shiftDown(fullRows.map(row => row[0].y))
+            gameCanvas.shiftDown(fullRows.map(row => row[0].y));
+            gameCanvas.score += fullRows.length*10;
 
         }
     },
     shiftDown: function (ys) {
         let shapesList = this.shapesList;
-        ys.sort((a, b) => a.id - b.id).map(y => shapesList.map(shape => shape.set).flat().filter(block => block.y < y).map(block => block.y = block.y + BLOCK_SIZE))
+        console.log(ys)
+        ys.sort().map(y => shapesList.map(shape => shape.set).flat().filter(block => block.y < y).map(block => block.y = block.y + BLOCK_SIZE))
+    },
+    displayScore: function(){
+
+        this.context.font = "30px Arial";
+        this.context.fillStyle = 'green'
+        this.context.strokeText(this.score, WIDTH/2, this.over ? HEIGHT/2 + 40: HEIGHT/2);
+    },
+    getTippetyTop: function(){
+        let tops = this.shapesList.filter(shape => !shape.isActive).map(shape => shape.set).flat().map(block => block.y)
+        return tippetyTop = Math.min(...tops)
+    },
+    stopGame: function(){
+        if(this.getTippetyTop()<=0){
+            console.log('GAME OVER', this.getTippetyTop())
+            clearInterval(this.interval);
+            clearInterval(this.spawnInterval)
+            this.over = true;
+        }
+    },
+    displayEnd: function(){
+        if(this.over){
+            this.context.font = "30px Arial";
+            this.context.fillStyle = 'red'
+            this.context.strokeText('GAME OVER', WIDTH/2 - 80, HEIGHT/2);
+
     }
+        }
+
+
 }
 
 gameCanvas.makeNewShape = function () {
@@ -159,7 +186,6 @@ class Shape {
                 return blocksAtX.length == 0 ? [x, HEIGHT] : [x, Math.min(...blocksAtX.map(block => block.y))];
             })
         }
-
         this.tops = tops;
         return tops;
     }
@@ -256,15 +282,14 @@ function updateKeys() {
     if (gameCanvas.keys && gameCanvas.keys['ArrowDown']) { gameCanvas.vy = GRAVITY * MOVEY; console.log('vy') }
     if (gameCanvas.keys && gameCanvas.keys['ArrowLeft']) { gameCanvas.vx = -VX * MOVEX; console.log('1') }
     if (gameCanvas.keys && gameCanvas.keys['Space']) { gameCanvas.rotate = true; console.log('1') }
-    updateBlocks();
 }
 
 function start() {
     gameCanvas.start();
     gameCanvas.makeNewShape();
     gameCanvas.setControlledShape();
-    spawnInterval = setInterval(gameCanvas.makeNewShape, SPAWNRATE);
-    keyInterval = setInterval(updateKeys, KEYRATE);
+    gameCanvas.spawnInterval = setInterval(gameCanvas.makeNewShape, SPAWNRATE);
+    // keyInterval = setInterval(updateKeys, KEYRATE);
 }
 
 function updateGameCanvas() {
@@ -272,10 +297,16 @@ function updateGameCanvas() {
     gameCanvas.vx = 0;
     gameCanvas.vy = GRAVITY;
     gameCanvas.rotate = false;
+    updateKeys();
+    updateBlocks();
     gameCanvas.shapesList.map(shape => shape.set.map(function (block) {
         gameCanvas.context.fillStyle = block.color;
         gameCanvas.context.fillRect(block.x, block.y, BLOCK_SIZE, BLOCK_SIZE);
     }))
+    gameCanvas.stopGame();
+    gameCanvas.displayEnd();
+    gameCanvas.displayScore();
+
 }
 
 function updateBlocks() {
@@ -294,5 +325,5 @@ function updateBlocks() {
     }
 }
 
-// start();
-
+start()
+// document.getElementById('start-game').addEventListener('click', start)

@@ -30,7 +30,13 @@ def register(request):
     return render(request, 'gameroom/register.html', {'form': form})
 
 def leaderboard(request):
-    user = None if !request.user.is_authenticated else request.user
-    topUSers = User.objects.all()
-    form = {'user': user}
-    return render(request, 'gameroom/leaderboard.html')
+    user = None if not request.user.is_authenticated else request.user
+    topScores = GameSession.objects.order_by('score', 'date').reverse()
+    form = {'user': user,
+            'topScores': topScores}
+    return render(request, 'gameroom/leaderboard.html', form)
+
+def userProfile(request):
+    userSessions = GameSession.objects.filter(user_id = request.user.id).order_by('date')
+    return render(request, 'gameroom/userProfile.html', {'userSessions': userSessions})
+

@@ -1,13 +1,13 @@
-const DIAMETER = 30;
-const STEP = 22
-const WIDTH = DIAMETER * STEP;
-const HEIGHT = DIAMETER * STEP;
-const FRAMERATE = 400;
-const STARTING_SNAKE_LENGTH = 6;
-const STARTX = WIDTH / 2 - DIAMETER * 3 + DIAMETER/2;
-const STARTY = HEIGHT / 2 + DIAMETER/2;
-const SPEED = DIAMETER/2;
-let interval;
+DIAMETER = 30;
+STEP = 22
+WIDTH = DIAMETER * STEP;
+HEIGHT = DIAMETER * STEP;
+FRAMERATE = 400;
+STARTING_SNAKE_LENGTH = 6;
+STARTX = WIDTH / 2 - DIAMETER * 3 + DIAMETER/2;
+STARTY = HEIGHT / 2 + DIAMETER/2;
+SPEED = DIAMETER/2;
+
 const makeRandom = function(min, max){
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
@@ -24,19 +24,17 @@ const gameCanvas = {
         this.canvas.width = WIDTH;
         this.canvas.height = HEIGHT;
         this.context = this.canvas.getContext('2d');
-        interval = setInterval(updateCanvas, FRAMERATE);
+        this.interval = setInterval(updateCanvas, FRAMERATE);
         console.log('add listener')
         window.addEventListener('keydown', function (e) {
             console.log('keypress', e.code)
             if (e.code == 'Enter') {
                 if (gameCanvas.paused) {
-                    console.log('PPPPPPPPPPPAAAAAAAAAAAAAAAUUUUUUUUUUUUUUSSSSSSSSSEEEEEEEEEEEDDDDDDDD', interval)
-                    clearInterval(interval)
-                    console.log(interval)
+                    clearInterval(gameCanvas.interval)
                     gameCanvas.paused = false;
                 }
                 else {
-                    interval = setInterval(updateCanvas, FRAMERATE);
+                    gameCanvas.interval = setInterval(updateCanvas, FRAMERATE);
                     gameCanvas.paused = true;
                 }
             }
@@ -60,7 +58,7 @@ const gameCanvas = {
             }
             }
         }
-        this.setFoodOut = false;      
+        this.setFoodOut = false;
     }
 }
 
@@ -151,9 +149,9 @@ class Snake {
             {
                 // this.head.vx = vx;
                 // this.head.vy = vy;
-                this.turnpoints.push(new TurnPoint(this.head.x, this.head.y, vx, vy)) 
+                this.turnpoints.push(new TurnPoint(this.head.x, this.head.y, vx, vy))
             }
-            
+
         }
         // const doesSelfCollide = this.doesSelfReverse(this.head.vx, this.head.vy);
         if(this.doesSelfCollide(this.head.vx, this.head.vy)){
@@ -169,7 +167,7 @@ class Snake {
         return ((vx != 0 && vx == -this.head.vx) || (vy != 0 && vy == -this.head.vy))
     }
     shouldRemoveTurnpoint(){
-            return this.turnpoints.length ? this.tail.x == this.turnpoints[0].x && this.tail.y == this.turnpoints[0].y : false        
+            return this.turnpoints.length ? this.tail.x == this.turnpoints[0].x && this.tail.y == this.turnpoints[0].y : false
     }
     doesSelfCollide(vx, vy){
         gameCanvas.snake.body.slice(1,-1).map(bodySegment => console.log('dx: ', this.head.x + vx - bodySegment.x - bodySegment.getNewVelocity()[0] ,
@@ -230,4 +228,3 @@ wrapAround = function(pos){
             return pos;
     }
 }
-// start();

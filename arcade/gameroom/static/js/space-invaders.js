@@ -294,7 +294,7 @@ function drawCircle(color, x,y, diameter){
 }
 
 
-const startInvaders = function(){
+const start = function(){
     gameCanvas.ship = new Ship( [WIDTH/2, HEIGHT -115])
     let invader = new Invader([WIDTH*.6, 50])
     gameCanvas.invaders.push(invader)
@@ -302,4 +302,5 @@ const startInvaders = function(){
     gameCanvas.start()
 }
 
-startInvaders()
+start()
+ document.getElementById('start-game').addEventListener('click', start)

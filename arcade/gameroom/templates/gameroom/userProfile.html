@@ -1,29 +1,27 @@
 {% extends 'gameroom/layout.html' %}
 
-{% block head  %}
-<title>Leader Board</title>
-{% endblock%}
+{% block head %}
+    <title>User Profile</title>
+{% endblock %}
 
 {% block body %}
-
+<h3>{{user.username}}:</h3>
 <table class="table table-sm table-hover">
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Username</th>
       <th scope="col">Game</th>
       <th scope="col">Score</th>
       <th scope="col">Date</th>
     </tr>
   </thead>
   <tbody>
-  {% for score in topScores %}
+  {% for session in userSessions %}
       <tr>
           <th scope="row">{{ forloop.counter }}</th>
-          <td>{{score.user.username}}</td>
-          <td>{{score.game}}</td>
-          <td>{{score.score}}</td>
-          <td>{{score.date}}</td>
+          <td>{{session.game}}</td>
+          <td>{{session.score}}</td>
+          <td>{{session.date}}</td>
         </tr>
   {% endfor %}
   </tbody>

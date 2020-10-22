@@ -15,14 +15,11 @@
         </p>
         <canvas id='canvas' style="border: 1px solid #000000"></canvas>
         <button>Save</button>
-        <button id="start-game">Start</button>
+        <button id="start-game" >Start</button>
 
             <script src="{% static path %}"></script>
-            <script>
-                document.getElementById('start-game').addEventListener('click', () =>{
-                    start();
-                                })
-            </script>
+            <script src = "{% static 'js/collisions.js' %}"></script>
+
 
     </div>
 {% endblock%}
