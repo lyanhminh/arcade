@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
 from .models import GameSession
+from .forms import GameSessionForm
 from django.urls import reverse
 
 # Create your views here.
@@ -14,7 +15,16 @@ def index(request):
 
 def play(request, game):
     print(games[game])
-    return render(request, "gameroom/play.html", {'game': game, 'path': games[game]})
+    if request.method == 'POST':
+        form = GameSessionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, "gameroom/play.html", {'game': game, 'path': games[game], 'form': GameSessionForm()})
+        else:
+            return render(request, "gameroom/play.html", {'game': game, 'path': games[game], 'form': form})
+    else:
+        form = GameSessionForm()
+        return render(request, "gameroom/play.html", {'game': game, 'path': games[game], 'form': form})
 #
 def register(request):
     if request.method == 'POST':

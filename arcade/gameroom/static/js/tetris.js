@@ -109,7 +109,6 @@ const gameCanvas = {
             this.context.font = "30px Arial";
             this.context.fillStyle = 'red'
             this.context.strokeText('GAME OVER', WIDTH/2 - 80, HEIGHT/2);
-
     }
         }
 

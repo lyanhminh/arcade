@@ -11,6 +11,7 @@ const A = 15;
 const B = 10;
 const DIAMETER = 15;
 
+
 const gameCanvas = {
     canvas: document.getElementById('canvas'),
     ship: null,
@@ -281,7 +282,7 @@ const updateKeys = function() {
     if (gameCanvas.keys && gameCanvas.keys['ArrowDown']) { vy = SPEED ; console.log('vy') }
     if (gameCanvas.keys && gameCanvas.keys['ArrowUp']) { vy = -SPEED ; console.log('vy') }
     if (gameCanvas.keys && gameCanvas.keys['ArrowLeft']) { vx = -SPEED ; console.log('1') }
-    if (gameCanvas.keys && gameCanvas.keys['Space']) { fire = true; console.log('1') }
+    if (gameCanvas.keys && gameCanvas.keys['Space']) { fire = true ;console.log('1') }
     gameCanvas.ship.update(vx, vy)
 
 }
@@ -303,4 +304,4 @@ const start = function(){
 }
 
 start()
- document.getElementById('start-game').addEventListener('click', start)
+// document.getElementById('start-game').addEventListener('click', start)

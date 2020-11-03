@@ -8,18 +8,26 @@
 {% endblock%}
 
 {% block body %}
+        <canvas id='canvas' style="border: 1px solid #000000"></canvas>
 
     <div>
         <p id="game-title">
             {{game}}
         </p>
-        <canvas id='canvas' style="border: 1px solid #000000"></canvas>
-        <button>Save</button>
+        {% if user.is_authenticated %}
+        <input type="hidden" id="user" value={{user.id}}>
+        <input type="hidden" id="game" value={{game}}>
+        <form id="form" method="post" action="{% url 'gameroom:play' game %}">
+            {% csrf_token %}
+            {{form}}
+            <button  class="btn btn-primary btn-sm" id="save" onclick="saveHandler" >Save</button>
+        </form>
+        {% endif %}
         <button id="start-game" >Start</button>
-
             <script src="{% static path %}"></script>
             <script src = "{% static 'js/collisions.js' %}"></script>
-
+            <script src="{% static 'js/context.js' %}"></script>
 
     </div>
+
 {% endblock%}

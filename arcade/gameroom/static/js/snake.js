@@ -1,8 +1,8 @@
 DIAMETER = 30;
-STEP = 22
+STEP = 18
 WIDTH = DIAMETER * STEP;
 HEIGHT = DIAMETER * STEP;
-FRAMERATE = 400;
+FRAMERATE = 100;
 STARTING_SNAKE_LENGTH = 6;
 STARTX = WIDTH / 2 - DIAMETER * 3 + DIAMETER/2;
 STARTY = HEIGHT / 2 + DIAMETER/2;
@@ -18,7 +18,8 @@ const gameCanvas = {
     setFoodOut: true,
     foodPos: [1,1],
     turnPoints: [],
-    points: 0,
+    over: false,
+    score: 0,
     start: function () {
         console.log('starting game')
         this.canvas.width = WIDTH;
@@ -59,6 +60,26 @@ const gameCanvas = {
             }
         }
         this.setFoodOut = false;
+    },
+    stopGame: function(){
+        if(this.snake.head.x < DIAMETER/2 || this.snake.head.x > WIDTH - DIAMETER/2 || this.snake.head.y < DIAMETER/2 || this.snake.head.y > HEIGHT - DIAMETER/2){
+            clearInterval(this.interval);
+            clearInterval(this.spawnInterval)
+            this.over = true;
+        }
+    },
+    displayScore: function(){
+
+        this.context.font = "30px Arial";
+        this.context.fillStyle = 'green'
+        this.context.strokeText(this.score, WIDTH/2, this.over ? HEIGHT/2 + 40: HEIGHT/2);
+    },
+    displayEnd: function(){
+        if(this.over){
+            this.context.font = "30px Arial";
+            this.context.fillStyle = 'red'
+            this.context.strokeText('GAME OVER', WIDTH/2 - 80, HEIGHT/2);
+        }
     }
 }
 
@@ -69,8 +90,9 @@ function updateCanvas() {
     gameCanvas.snake.body.map(segment => {drawCircle(segment.color, segment.x, segment.y);
     })
     drawCircle('green', gameCanvas.foodPos[0], gameCanvas.foodPos[1])
-
-    console.log('update canvas', gameCanvas.snake)
+    gameCanvas.stopGame()
+    gameCanvas.displayScore();
+    gameCanvas.displayEnd();
 }
 
 class TurnPoint {
@@ -92,8 +114,8 @@ class Segment {
     }
     update(){
         [this.vx, this.vy] = this.getNewVelocity();
-        this.x = wrapAround(this.x + this.vx);
-        this.y = wrapAround(this.y + this.vy);
+        this.x = this.x + this.vx;
+        this.y = this.y + this.vy;
         console.log('same seg update', this.x, this.y, this.vx, this.vy)
     }
     getNewVelocity(){
@@ -101,7 +123,7 @@ class Segment {
         console.log('segment update', this.x, this.y, this.color)
         let vx = this.vx;
         let vy = this.vy;
-        if(turnpoint.length){
+        if(turnpoint.length>0){
             console.log('in turnpoint')
             vx = turnpoint[0].vx
             vy = turnpoint[0].vy;
@@ -194,6 +216,7 @@ class Snake {
             gameCanvas.placeFood();
             this.body.push(new Segment('gray', this.tail.x - Math.sign(this.tail.vx)*DIAMETER, this.tail.y - Math.sign(this.tail.vy)*DIAMETER, this.tail.vx, this.tail.vy ))
             this.tail = this.body.slice(-1)[0];
+            gameCanvas.score += 10;
         }
     }
 }
@@ -228,3 +251,5 @@ wrapAround = function(pos){
             return pos;
     }
 }
+
+start();
